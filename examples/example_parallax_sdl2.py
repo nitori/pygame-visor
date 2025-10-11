@@ -43,7 +43,6 @@ def main():
         bg_view.render(app.renderer, app.get_tiles_for_bbox(app.tiles, bbox))
 
         # just dump it on top of the entire screen, so the bg is not as bright as the fg.
-        # app.screen.blit(smoky_surf, (0, 0))
         smoky_surf.draw(dstrect=(0, 0))
 
         bbox = view.get_bounding_box()
