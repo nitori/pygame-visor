@@ -25,7 +25,7 @@ def main():
     items = []
     for n in range(10):
         item = pygame.Surface((40, 40))
-        item.fill('blue')
+        item.fill("blue")
         x = n * 50 + 5
         y = 5
         items.append((x, y, item))
@@ -38,7 +38,7 @@ def main():
 
         # just a simple "prograssing" health bar
         health = max(0, min(100, int(100 - acc * 10))) / 100
-        health_bar.fill('red')
+        health_bar.fill("red")
         pygame.draw.rect(health_bar, (0, 128, 0), (0, 0, int(health * 250), 20))
 
         # render the map
@@ -47,9 +47,7 @@ def main():
         view.render(app.screen, app.get_tiles_for_bbox(app.tiles, bbox))
 
         # render the player
-        view.render(app.screen, [
-            (app.player_pos.topleft, app.player_surf)
-        ])
+        view.render(app.screen, [(app.player_pos.topleft, app.player_surf)])
 
         # Render health bar to the "active area".
         # With RegionExpand, the healthbar might be positioned slightly inward
@@ -63,5 +61,5 @@ def main():
         app.screen.blit(item_bar, r)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

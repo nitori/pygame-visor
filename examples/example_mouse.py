@@ -35,20 +35,16 @@ def main():
             tx, ty, tile_surf = data
             tmp = tile_surf.copy()
             tmp.fill((0, 128, 255))
-            view.render(app.screen, [
-                ((tx, ty), tmp)
-            ])
+            view.render(app.screen, [((tx, ty), tmp)])
 
-            index_surf = font.render(f'({col}, {row})', True, 'black')
+            index_surf = font.render(f"({col}, {row})", True, "black")
             # get screen coords, and blit directly into the screen, to prevent scaling of the text
             sx, sy = view.world_to_screen((tx, ty))
             app.screen.blit(index_surf, (sx + 2, sy + 5))
 
         # render palyer last.
-        view.render(app.screen, [
-            (app.player_pos.topleft, app.player_surf)
-        ])
+        view.render(app.screen, [(app.player_pos.topleft, app.player_surf)])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

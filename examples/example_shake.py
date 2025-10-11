@@ -39,10 +39,10 @@ def main():
     view.move_to(app.player_pos.center)
 
     button = pygame.Surface((100, 50))
-    button.fill('black')
+    button.fill("black")
 
     font = pygame.Font(pygame.font.get_default_font())
-    button_text = font.render('SHAKE', True, 'white')
+    button_text = font.render("SHAKE", True, "white")
 
     shake_start = None
     shake_time = 0.5
@@ -54,7 +54,7 @@ def main():
         try:
             pygame.mouse.set_cursor(cursor)
         except Exception as e:
-            print(f'could not set cursor {cursor}. ignoring.', e)
+            print(f"could not set cursor {cursor}. ignoring.", e)
 
     for delta in app.loop(60):
         view.move_to(app.player_pos.center)
@@ -74,9 +74,7 @@ def main():
         view.render(app.screen, app.get_tiles_for_bbox(app.tiles, bbox))
 
         # render the player
-        view.render(app.screen, [
-            (app.player_pos.topleft, app.player_surf)
-        ])
+        view.render(app.screen, [(app.player_pos.topleft, app.player_surf)])
 
         active_area = view.get_active_screen_area()
 
@@ -97,5 +95,5 @@ def main():
             try_set_cursor(default_cursor)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

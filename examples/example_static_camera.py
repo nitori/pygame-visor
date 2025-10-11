@@ -1,5 +1,3 @@
-import pygame
-
 from pygame_visor import Visor, VisorMode
 from common import App
 
@@ -21,16 +19,16 @@ def main():
         return [
             (side, r.copy().move(dx, dy))
             for side, (dx, dy) in [
-                ('up', (0, -r.height)),
-                ('right', (r.width, 0)),
-                ('bottom', (0, r.height)),
-                ('left', (-r.width, 0)),
+                ("up", (0, -r.height)),
+                ("right", (r.width, 0)),
+                ("bottom", (0, r.height)),
+                ("left", (-r.width, 0)),
             ]
         ]
 
     neighbours = create_new_neighbours(view.region)
     exclude = None
-    exclude_map = {'left': 'right', 'right': 'left', 'up': 'bottom', 'bottom': 'up'}
+    exclude_map = {"left": "right", "right": "left", "up": "bottom", "bottom": "up"}
 
     for delta in app.loop(60):
         view.lerp_to(current_center, 0.1)
@@ -39,7 +37,7 @@ def main():
             if app.player_pos.colliderect(sr):
                 if side != exclude:
                     current_center = sr.center
-                    if side in ('left', 'right'):
+                    if side in ("left", "right"):
                         view.move_to(sr.center)
                     neighbours = create_new_neighbours(sr)
                     exclude = exclude_map[side]
@@ -51,10 +49,8 @@ def main():
         view.render(app.screen, app.get_tiles_for_bbox(app.tiles, bbox))
 
         # render the player
-        view.render(app.screen, [
-            (app.player_pos.topleft, app.player_surf)
-        ])
+        view.render(app.screen, [(app.player_pos.topleft, app.player_surf)])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

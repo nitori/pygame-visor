@@ -27,8 +27,8 @@ def main():
     view2.move_to(app.player2_pos.center)
 
     font = pygame.font.Font(pygame.font.get_default_font())
-    text1 = font.render(f"Player 1 (WASD)", True, 'black', 'white')
-    text2 = font.render(f"Player 2 (Arrow Keys)", True, 'black', 'white')
+    text1 = font.render("Player 1 (WASD)", True, "black", "white")
+    text2 = font.render("Player 2 (Arrow Keys)", True, "black", "white")
 
     def event_handler(event):
         # eh
@@ -43,21 +43,27 @@ def main():
         view1.lerp_to(app.player_pos.center, 0.1)
         view2.lerp_to(app.player2_pos.center, 0.1)
 
-        surf1.fill('black')
+        surf1.fill("black")
         bbox = view1.get_bounding_box()
         view1.render(surf1, app.get_tiles_for_bbox(app.tiles, bbox))
-        view1.render(surf1, [
-            (app.player2_pos.topleft, app.player2_surf),
-            (app.player_pos.topleft, app.player_surf),
-        ])
+        view1.render(
+            surf1,
+            [
+                (app.player2_pos.topleft, app.player2_surf),
+                (app.player_pos.topleft, app.player_surf),
+            ],
+        )
 
-        surf2.fill('black')
+        surf2.fill("black")
         bbox = view2.get_bounding_box()
         view2.render(surf2, app.get_tiles_for_bbox(app.tiles, bbox))
-        view2.render(surf2, [
-            (app.player_pos.topleft, app.player_surf),
-            (app.player2_pos.topleft, app.player2_surf),
-        ])
+        view2.render(
+            surf2,
+            [
+                (app.player_pos.topleft, app.player_surf),
+                (app.player2_pos.topleft, app.player2_surf),
+            ],
+        )
 
         app.screen.blit(surf1, (0, 0))
         app.screen.blit(surf2, (0, app.screen.height // 2))
@@ -66,5 +72,5 @@ def main():
         app.screen.blit(text2, (10, 10 + app.screen.height // 2))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

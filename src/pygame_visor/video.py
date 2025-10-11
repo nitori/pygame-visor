@@ -7,7 +7,6 @@ from .visor import Visor as BaseVisor, VisorMode
 
 
 class Visor(BaseVisor):
-
     def render(self, renderer: Renderer, texture_iterable: TextureIterable) -> None:
         factor = self.get_scaling_factor()
         draw_area = self.get_active_screen_area()

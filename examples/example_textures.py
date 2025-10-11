@@ -19,7 +19,7 @@ def main():
     )
 
     surf = pygame.Surface((50, 50))
-    surf.fill('blue')
+    surf.fill("blue")
     tex = Texture.from_surface(app.renderer, surf)
 
     for delta in app.loop(60):
@@ -33,15 +33,24 @@ def main():
         view.render(app.renderer, app.get_tiles_for_bbox(app.tiles, bbox))
 
         # sample texture
-        view.render(app.renderer, [
-            ((10, 10), tex),
-        ])
+        view.render(
+            app.renderer,
+            [
+                ((10, 10), tex),
+            ],
+        )
 
         # player
-        view.render(app.renderer, [
-            (app.player_pos.topleft, app.player_surf)  # player_surf is actually a Texture (see App.__init__)
-        ])
+        view.render(
+            app.renderer,
+            [
+                (
+                    app.player_pos.topleft,
+                    app.player_surf,
+                )  # player_surf is actually a Texture (see App.__init__)
+            ],
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

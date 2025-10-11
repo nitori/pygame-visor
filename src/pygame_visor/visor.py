@@ -7,13 +7,18 @@ from pygame import FRect
 from pygame.typing import RectLike
 
 from .types import (
-    WorldPos, ScreenPos, ScreenSize, ScreenRect,
+    WorldPos,
+    ScreenPos,
+    ScreenSize,
+    ScreenRect,
     SurfaceIterable,
-    is_screen_rect, is_screen_size,
-    Limits, is_limits,
+    is_screen_rect,
+    is_screen_size,
+    Limits,
+    is_limits,
 )
 
-__all__ = ['VisorMode', 'Visor']
+__all__ = ["VisorMode", "Visor"]
 
 
 class VisorMode(Enum):
@@ -27,7 +32,14 @@ class Visor:
     region: FRect
     limits: Limits | None
 
-    def __init__(self, mode: VisorMode, screen: ScreenRect, *, region: RectLike, limits: Limits | None = None) -> None:
+    def __init__(
+        self,
+        mode: VisorMode,
+        screen: ScreenRect,
+        *,
+        region: RectLike,
+        limits: Limits | None = None,
+    ) -> None:
         self.mode = mode
         self.screen = self._screen_size(screen)
         self.region = FRect(region)
@@ -35,8 +47,10 @@ class Visor:
 
     def set_limits(self, limits: Limits | None) -> None:
         if limits is not None and not is_limits(limits):
-            raise ValueError(f'Limits specified do not have the right format. '
-                             f'Makes sure they\'re of type: {Limits.__value__}')
+            raise ValueError(
+                f"Limits specified do not have the right format. "
+                f"Makes sure they're of type: {Limits.__value__}"
+            )
         self.limits = limits
 
     def update_screen(self, screen: ScreenRect) -> None:
@@ -87,7 +101,7 @@ class Visor:
 
         wxy = self.screen_to_world(screen_pos)
         if wxy is None:
-            raise ValueError('Cannot scale outside the world')
+            raise ValueError("Cannot scale outside the world")
 
         wx2, wy2 = wxy
         wdx, wdy = wx - wx2, wy - wy2
@@ -105,7 +119,9 @@ class Visor:
             sw, sh = screen_rect
             return sw, sh
         else:
-            raise ValueError(f'screen_rect does not have a valid size of 2 or 4: {len(screen_rect)}')
+            raise ValueError(
+                f"screen_rect does not have a valid size of 2 or 4: {len(screen_rect)}"
+            )
 
     def get_bounding_box(self) -> FRect:
         """
@@ -185,8 +201,10 @@ class Visor:
         wy = (sy - ws_y) / factor + self.region.y
 
         if self.mode == VisorMode.RegionLetterbox:
-            if self.region.left <= wx < self.region.right \
-                and self.region.top <= wy < self.region.bottom:
+            if (
+                self.region.left <= wx < self.region.right
+                and self.region.top <= wy < self.region.bottom
+            ):
                 return pygame.Vector2(wx, wy)
             return None
 
@@ -209,7 +227,9 @@ class Visor:
         return sx, sy
 
     @functools.lru_cache(maxsize=20)
-    def _get_scaled_surface(self, surface: pygame.Surface, width: int, heigth: int) -> pygame.Surface:
+    def _get_scaled_surface(
+        self, surface: pygame.Surface, width: int, heigth: int
+    ) -> pygame.Surface:
         return pygame.transform.scale(surface, (width, heigth))
 
     @classmethod
@@ -222,7 +242,7 @@ class Visor:
         Use get_scaling_cache_info() to get stats on the current size and hits/misses.
         If the misses stay mostly static while the camera is not moving, that's usually a good sign.
         """
-        original_method = getattr(cls._get_scaled_surface, '__wrapped__', None)
+        original_method = getattr(cls._get_scaled_surface, "__wrapped__", None)
         if original_method is None:
             original_method = cls._get_scaled_surface
 
@@ -235,14 +255,16 @@ class Visor:
 
     @classmethod
     def clear_scaling_cache(cls) -> None:
-        if hasattr(cls._get_scaled_surface, 'cache_clear'):
+        if hasattr(cls._get_scaled_surface, "cache_clear"):
             cls._get_scaled_surface.cache_clear()
 
-    def render(self, surface: pygame.Surface, surface_iterable: SurfaceIterable) -> None:
+    def render(
+        self, surface: pygame.Surface, surface_iterable: SurfaceIterable
+    ) -> None:
         screen_rect = surface.get_rect()
         assert screen_rect.size == self.screen, (
-            'Screen rect sizes differ. Make sure to use update_screen(rect) '
-            'before calling this method, if your screen size changed.'
+            "Screen rect sizes differ. Make sure to use update_screen(rect) "
+            "before calling this method, if your screen size changed."
         )
         factor = self.get_scaling_factor()
         draw_area = self.get_active_screen_area()

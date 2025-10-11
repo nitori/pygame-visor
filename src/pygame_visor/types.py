@@ -8,15 +8,24 @@ if TYPE_CHECKING:
         pass
 
 __all__ = [
-    'IntPair', 'FloatPair',
-    'IntQuad', 'FloatQuad',
-    'WorldPos', 'ScreenPos',
-    'WorldSize', 'ScreenSize',
-    'WorldRect', 'ScreenRect',
-    'is_screen_rect', 'is_screen_size',
-    'is_world_rect', 'is_world_size',
-    'SurfaceIterable', 'TextureIterable',
-    'Limits', 'is_limits',
+    "IntPair",
+    "FloatPair",
+    "IntQuad",
+    "FloatQuad",
+    "WorldPos",
+    "ScreenPos",
+    "WorldSize",
+    "ScreenSize",
+    "WorldRect",
+    "ScreenRect",
+    "is_screen_rect",
+    "is_screen_size",
+    "is_world_rect",
+    "is_world_size",
+    "SurfaceIterable",
+    "TextureIterable",
+    "Limits",
+    "is_limits",
 ]
 
 type IntPair = tuple[int, int]
@@ -56,4 +65,8 @@ def is_world_size(s: WorldRect) -> TypeGuard[WorldSize]:
 
 
 def is_limits(s: Limits) -> TypeGuard[IntQuad | FloatQuad]:
-    return len(s) == 4 and isinstance(s, tuple) and all(isinstance(v, (int, float)) for v in s)
+    return (
+        len(s) == 4
+        and isinstance(s, tuple)
+        and all(isinstance(v, (int, float)) for v in s)
+    )

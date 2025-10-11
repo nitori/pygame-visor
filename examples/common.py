@@ -41,14 +41,21 @@ class App[TileT]:
     window: Window
     renderer: Renderer
 
-    def __init__(self, size: tuple[int, int] = (800, 600), *, resizable=False, second_player=False, use_sdl2=False):
+    def __init__(
+        self,
+        size: tuple[int, int] = (800, 600),
+        *,
+        resizable=False,
+        second_player=False,
+        use_sdl2=False,
+    ):
         pygame.init()
 
         flags = 0
         if resizable:
             flags = pygame.RESIZABLE
 
-        filename = '<unknown>'
+        filename = "<unknown>"
         if sys.argv and sys.argv[0]:
             filename = os.path.basename(sys.argv[0])
         if not filename:
@@ -57,15 +64,15 @@ class App[TileT]:
                 calling_file = stack[1].filename
                 filename = os.path.basename(calling_file)
 
-        caption = f'pygame-visor example {filename} - Python {sys.version}'
+        caption = f"pygame-visor example {filename} - Python {sys.version}"
 
         self.use_sdl2 = use_sdl2
         if use_sdl2:
-            print('init window')
+            print("init window")
             self.window = Window(caption, size=size, resizable=resizable)
-            print('init renderer')
+            print("init renderer")
             self.renderer = Renderer(self.window, accelerated=1, vsync=True)
-            print('done')
+            print("done")
         else:
             self.screen = pygame.display.set_mode(size, flags)
             pygame.display.set_caption(caption)
@@ -77,8 +84,8 @@ class App[TileT]:
         self.tile_size = 32
 
         self.offset = (
-            - (self.rows * self.tile_size) / 2,
-            - (self.columns * self.tile_size) / 2,
+            -(self.rows * self.tile_size) / 2,
+            -(self.columns * self.tile_size) / 2,
         )
 
         self.tiles = self.generate_world_tiles()
@@ -94,7 +101,7 @@ class App[TileT]:
 
         # world size
         self.player_surf = pygame.Surface((10, 10))
-        self.player_surf.fill('red')
+        self.player_surf.fill("red")
         if self.use_sdl2:
             self.player_surf = Texture.from_surface(self.renderer, self.player_surf)
 
@@ -107,10 +114,12 @@ class App[TileT]:
         self.player2_pos = None
         if second_player:
             self.player2_surf = pygame.Surface((10, 10))
-            self.player2_surf.fill('blue')
+            self.player2_surf.fill("blue")
             self.player2_pos = self.player2_surf.get_rect(center=(20, 0))
             if self.use_sdl2:
-                self.player2_surf = Texture.from_surface(self.renderer, self.player2_surf)
+                self.player2_surf = Texture.from_surface(
+                    self.renderer, self.player2_surf
+                )
 
     def generate_world_tiles(self) -> Tiles[TileT]:
         """
@@ -133,13 +142,15 @@ class App[TileT]:
                 tile.fill((tone, 255, tone))
                 if self.use_sdl2:
                     tile = Texture.from_surface(self.renderer, tile)
-                tiles[(column, row)] = (off_x + column * self.tile_size, off_y + row * self.tile_size, tile)
+                tiles[(column, row)] = (
+                    off_x + column * self.tile_size,
+                    off_y + row * self.tile_size,
+                    tile,
+                )
         return tiles
 
     def get_tiles_for_bbox(
-        self,
-        tiles: Tiles[TileT],
-        bbox: pygame.FRect
+        self, tiles: Tiles[TileT], bbox: pygame.FRect
     ) -> Generator[tuple[tuple[float, float], TileT]]:
         """
         This yields all the tiles visible.
@@ -188,7 +199,7 @@ class App[TileT]:
         frames = 0
         acc_deltas = 0
         font = pygame.Font(pygame.font.get_default_font())
-        fps_surf = font.render(f'FPS: {frames}', True, 'white', 'black')
+        fps_surf = font.render(f"FPS: {frames}", True, "white", "black")
 
         if self.use_sdl2:
             self.renderer.draw_color = 0, 0, 0, 255
@@ -205,26 +216,30 @@ class App[TileT]:
 
             delta = self.clock.tick(fps) / 1000
 
-            direction = self.get_input_vector((pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d))
+            direction = self.get_input_vector(
+                (pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d)
+            )
             if direction:
                 self.player_pos.center += direction * self.speed * delta
 
             if self.second_player:
-                direction2 = self.get_input_vector((pygame.K_UP, pygame.K_LEFT, pygame.K_DOWN, pygame.K_RIGHT))
+                direction2 = self.get_input_vector(
+                    (pygame.K_UP, pygame.K_LEFT, pygame.K_DOWN, pygame.K_RIGHT)
+                )
                 if direction2:
                     self.player2_pos.center += direction2 * self.speed * delta
 
             if self.use_sdl2:
                 self.renderer.clear()
             else:
-                self.screen.fill('black')
+                self.screen.fill("black")
 
             yield delta
 
             acc_deltas += delta
             if acc_deltas > 1.0:
                 acc_deltas -= 1.0
-                fps_surf = font.render(f'FPS: {frames}', True, 'white', 'black')
+                fps_surf = font.render(f"FPS: {frames}", True, "white", "black")
                 if self.use_sdl2:
                     fps_surf = Texture.from_surface(self.renderer, fps_surf)
                 frames = 0

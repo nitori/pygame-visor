@@ -29,13 +29,11 @@ def main():
         view.move_to(app.player_pos.center)
         bbox = view.get_bounding_box()
         view.render(app.screen, app.get_tiles_for_bbox(app.tiles, bbox))
-        view.render(app.screen, [
-            (app.player_pos.topleft, app.player_surf)
-        ])
+        view.render(app.screen, [(app.player_pos.topleft, app.player_surf)])
 
-        size_text = font.render(str(view.region.size), True, 'white', 'black')
+        size_text = font.render(str(view.region.size), True, "white", "black")
         app.screen.blit(size_text, (10, 10))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
