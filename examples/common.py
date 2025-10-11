@@ -113,6 +113,12 @@ class App:
         tiles: Tiles,
         bbox: pygame.FRect
     ) -> Generator[tuple[tuple[float, float], pygame.Surface]]:
+        """
+        This yields all the tiles visible.
+        Big regions possibly take a long time to render, so in any proper application,
+        you'd likely "chunk" the world into larger areas.
+        This is just a simple demo.
+        """
         left_column, top_row = self.get_tile(bbox.topleft)
         right_column, bottom_row = self.get_tile(bbox.bottomright)
 
