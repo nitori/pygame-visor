@@ -20,9 +20,9 @@ def main():
 
     def event_handler(event: pygame.Event):
         if event.type == pygame.KEYDOWN:
-            if event.key in (pygame.K_PLUS, pygame.K_KP_PLUS):
+            if event.key in (pygame.K_MINUS, pygame.K_KP_MINUS):
                 view.region.scale_by_ip(2, 2)
-            elif event.key in (pygame.K_MINUS, pygame.K_KP_MINUS):
+            elif event.key in (pygame.K_PLUS, pygame.K_KP_PLUS):
                 view.region.scale_by_ip(0.5, 0.5)
 
     for delta in app.loop(60, event_handler):
