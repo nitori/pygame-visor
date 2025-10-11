@@ -1,5 +1,11 @@
-from typing import TypeGuard, Iterable
+from typing import TypeGuard, Iterable, TYPE_CHECKING
 from pygame import Vector2, Rect, FRect, Surface
+
+if TYPE_CHECKING:
+    try:
+        from pygame._sdl2.video import Texture
+    except ImportError:
+        pass
 
 __all__ = [
     'IntPair', 'FloatPair',
@@ -9,7 +15,7 @@ __all__ = [
     'WorldRect', 'ScreenRect',
     'is_screen_rect', 'is_screen_size',
     'is_world_rect', 'is_world_size',
-    'SurfaceIterable',
+    'SurfaceIterable', 'TextureIterable',
     'Limits', 'is_limits',
 ]
 
@@ -28,6 +34,7 @@ type WorldRect = IntPair | FloatPair | IntQuad | FloatQuad | Rect | FRect
 type ScreenRect = IntPair | IntQuad | Rect
 
 type SurfaceIterable = Iterable[tuple[WorldPos, Surface]]
+type TextureIterable = Iterable[tuple[WorldPos, Texture]]
 
 type Limits = IntQuad | FloatQuad
 
