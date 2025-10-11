@@ -169,4 +169,7 @@ does not follow the player all the time, only when the player moves to a new reg
 See [`example_parallax.py`](examples/example_parallax.py) for a simple example of a "background view" that
 moves "slower" than the foreground. A traditional parallax effect.
 
+For fun, I also added a variant that uses _sdl2 Textures:
+See [`example_parallax_sdl2.py`](examples/example_parallax_sdl2.py).
+
 ![example_parallax.png](examples/screenshots/example_parallax.png)
