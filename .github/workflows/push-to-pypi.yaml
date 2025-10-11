@@ -1,4 +1,4 @@
-name: Publish Python 🐍 distribution 📦 to PyPI and TestPyPI
+name: Publish pygame-visor distribution to PyPI
 on: push
 jobs:
   tests:
@@ -61,7 +61,7 @@ jobs:
           path: dist/
 
   publish:
-    name: Publish to TestPyPI
+    name: Publish to PyPI
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
 
@@ -69,8 +69,8 @@ jobs:
       - build
 
     environment:
-      name: testpypi
-      url: https://test.pypi.org/p/pygame-visor
+      name: pypi
+      url: https://pypi.org/p/pygame-visor
 
     permissions:
       id-token: write
@@ -82,7 +82,5 @@ jobs:
           name: python-package-distributions
           path: dist/
 
-      - name: Publish distribution 📦 to TestPyPI
+      - name: Publish distribution to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
