@@ -48,10 +48,11 @@ jobs:
         with:
           enable-cache: true
 
+      - name: uv sync
+        run: uv sync
+
       - name: build
-        run: >-
-          uv sync
-          uv build
+        run: uv build
 
       - name: Store the distribution packages
         uses: actions/upload-artifact@v4
