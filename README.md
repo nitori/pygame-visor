@@ -149,13 +149,13 @@ See [`example_mouse.py`](examples/example_mouse.py) for a demonstration of track
 
 See [`example_ui.py`](examples/example_ui.py) for a simple UI example, of how to position them in the "active" area, in any VisorMode.
 
-![example_ui.png](examples/screenshots/example_ui.png)**
+![example_ui.png](examples/screenshots/example_ui.png)
 
 ---
 
 See [`example_split_screen.py`](examples/example_split_screen.py) for a simple split screen example with two player. Using WASD and Arrow keys for independent movement.
 
-![example_split_screen.png](examples/screenshots/example_split_screen.png)**
+![example_split_screen.png](examples/screenshots/example_split_screen.png)
 
 ---
 
@@ -168,3 +168,5 @@ does not follow the player all the time, only when the player moves to a new reg
 
 See [`example_parallax.py`](examples/example_parallax.py) for a simple example of a "background view" that
 moves "slower" than the foreground. A traditional parallax effect.
+
+![example_parallax.png](examples/screenshots/example_parallax.png)
