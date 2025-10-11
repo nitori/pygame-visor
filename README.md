@@ -163,3 +163,8 @@ See [`example_shake.py`](examples/example_shake.py) for a simple shaking camera 
 
 See [`example_static_camera.py`](examples/example_static_camera.py) for a static camera fixed to regions. The camera 
 does not follow the player all the time, only when the player moves to a new region.
+
+---
+
+See [`example_parallax.py`](examples/example_parallax.py) for a simple example of a "background view" that
+moves "slower" than the foreground. A traditional parallax effect.
