@@ -99,11 +99,7 @@ class Visor:
         screen_pos = self.world_to_screen((wx, wy))
         self.region.scale_by_ip(factor, factor)
 
-        wxy = self.screen_to_world(screen_pos)
-        if wxy is None:
-            raise ValueError("Cannot scale outside the world")
-
-        wx2, wy2 = wxy
+        wx2, wy2 = self.screen_to_world(screen_pos)
         wdx, wdy = wx - wx2, wy - wy2
         cx, cy = self.region.center
         self.move_to((wdx + cx, wdy + cy))
@@ -185,8 +181,15 @@ class Visor:
 
         return pygame.Rect(left, top, ws_width, ws_height)
 
-    def screen_to_world(self, screen_pos: ScreenPos) -> pygame.Vector2 | None:
-        """May return None in RegionLetterbox, if the pos is outside the bounding box"""
+    def screen_to_world(self, screen_pos: ScreenPos) -> pygame.Vector2:
+        """
+        Translate a screen position to a world position.
+
+        In RegionLetterbox mode, the returned position may lie outside the visor's
+        region (e.g. when ``screen_pos`` is inside a letterbox bar). Use
+        ``screen_pos_in_active_area()`` to test whether a screen position lies
+        within the visible area.
+        """
         # ViewMode.RegionLetterbox
         # region = (0, 0, 400, 300)
         # screen_rect = (0, 0, 1920, 1080)   -- region scaled to: (1440, 1080)
@@ -200,15 +203,16 @@ class Visor:
         wx = (sx - ws_x) / factor + self.region.x
         wy = (sy - ws_y) / factor + self.region.y
 
-        if self.mode == VisorMode.RegionLetterbox:
-            if (
-                self.region.left <= wx < self.region.right
-                and self.region.top <= wy < self.region.bottom
-            ):
-                return pygame.Vector2(wx, wy)
-            return None
-
         return pygame.Vector2(wx, wy)
+
+    def screen_pos_in_active_area(self, screen_pos: ScreenPos) -> bool:
+        """
+        Return True if ``screen_pos`` lies within the visor's active screen area.
+
+        This check is mode-independent: in RegionLetterbox the area excludes
+        letterbox bars; in RegionExpand it excludes the extended/overflow region.
+        """
+        return self.get_active_screen_area().collidepoint(screen_pos)
 
     def world_to_screen(self, world_pos: WorldPos) -> ScreenPos:
         # ViewMode.RegionLetterbox

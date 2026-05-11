@@ -153,13 +153,15 @@ def test_active_screen_area(
             (1679, 1079),
             (400 / 1440 * 1439, 300 / 1080 * 1079),
         ],
+        # the ends are *exclusive* for screen_pos_in_active_area, but the
+        # coordinate math is well-defined regardless
         [
             VisorMode.RegionLetterbox,
             (0, 0, 400, 300),
             (1920, 1080),
             (1680, 1080),
-            None,
-        ],  # the ends are *exclusive*
+            (400, 300),
+        ],
         [
             VisorMode.RegionExpand,
             (0, 0, 400, 300),
@@ -167,11 +169,11 @@ def test_active_screen_area(
             (1680, 1080),
             (400, 300),
         ],
-        # offset: (240, 0)
-        [VisorMode.RegionLetterbox, (0, 0, 400, 300), (1920, 1080), (60, 0), None],
+        # offset: (240, 0) -- screen pos sits in the left letterbox bar
+        [VisorMode.RegionLetterbox, (0, 0, 400, 300), (1920, 1080), (60, 0), (-50, 0)],
         [VisorMode.RegionExpand, (0, 0, 400, 300), (1920, 1080), (60, 0), (-50, 0)],
-        # offset: (0, 555)
-        [VisorMode.RegionLetterbox, (0, 0, 400, 300), (1080, 1920), (0, 420), None],
+        # offset: (0, 555) -- screen pos sits in the top letterbox bar
+        [VisorMode.RegionLetterbox, (0, 0, 400, 300), (1080, 1920), (0, 420), (0, -50)],
         [VisorMode.RegionExpand, (0, 0, 400, 300), (1080, 1920), (0, 420), (0, -50)],
     ],
 )
@@ -180,17 +182,53 @@ def test_screen_to_world(
     region: RectLike,
     screen_size: ScreenSize,
     screen_pos: ScreenPos,
-    expected_world_pos: WorldPos | None,
+    expected_world_pos: WorldPos,
 ):
     view = Visor(mode, screen_size, region=region)
     world_pos = view.screen_to_world(screen_pos)
-    if expected_world_pos is None or world_pos is None:
-        assert world_pos == expected_world_pos
-    else:
-        for a, b in zip(world_pos, expected_world_pos):
-            assert math.isclose(a, b), (
-                f"Failed for {mode} width: {tuple(world_pos)} == {expected_world_pos}"
-            )
+    for a, b in zip(world_pos, expected_world_pos):
+        assert math.isclose(a, b), (
+            f"Failed for {mode} width: {tuple(world_pos)} == {expected_world_pos}"
+        )
+
+
+@pytest.mark.parametrize(
+    "mode,region,screen_size,screen_pos,expected",
+    [
+        # screen ratio matches region ratio: no bars, active area == screen
+        [VisorMode.RegionLetterbox, (0, 0, 400, 300), (400, 300), (0, 0), True],
+        [VisorMode.RegionLetterbox, (0, 0, 400, 300), (400, 300), (200, 150), True],
+        [VisorMode.RegionLetterbox, (0, 0, 400, 300), (400, 300), (399, 299), True],
+        # 1920x1080 + (0,0,400,300) -> active area (240, 0, 1440, 1080)
+        [VisorMode.RegionLetterbox, (0, 0, 400, 300), (1920, 1080), (240, 0), True],
+        [VisorMode.RegionLetterbox, (0, 0, 400, 300), (1920, 1080), (1679, 1079), True],
+        # right/bottom edges are exclusive
+        [VisorMode.RegionLetterbox, (0, 0, 400, 300), (1920, 1080), (1680, 1080), False],
+        # inside left letterbox bar
+        [VisorMode.RegionLetterbox, (0, 0, 400, 300), (1920, 1080), (60, 0), False],
+        [VisorMode.RegionLetterbox, (0, 0, 400, 300), (1920, 1080), (239, 540), False],
+        # 1080x1920 + (0,0,400,300) -> active area (0, 555, 1080, 810)
+        # inside top letterbox bar
+        [VisorMode.RegionLetterbox, (0, 0, 400, 300), (1080, 1920), (0, 420), False],
+        [VisorMode.RegionLetterbox, (0, 0, 400, 300), (1080, 1920), (540, 554), False],
+        [VisorMode.RegionLetterbox, (0, 0, 400, 300), (1080, 1920), (540, 555), True],
+        # RegionExpand: active area is the same rect as in Letterbox -- positions
+        # in the extended/overflow area are NOT in the active area.
+        [VisorMode.RegionExpand, (0, 0, 400, 300), (1920, 1080), (60, 0), False],
+        [VisorMode.RegionExpand, (0, 0, 400, 300), (1920, 1080), (1919, 1079), False],
+        [VisorMode.RegionExpand, (0, 0, 400, 300), (1080, 1920), (0, 420), False],
+        [VisorMode.RegionExpand, (0, 0, 400, 300), (1920, 1080), (960, 540), True],
+    ],
+)
+def test_screen_pos_in_active_area(
+    mode: VisorMode,
+    region: RectLike,
+    screen_size: ScreenSize,
+    screen_pos: ScreenPos,
+    expected: bool,
+):
+    view = Visor(mode, screen_size, region=region)
+    assert view.screen_pos_in_active_area(screen_pos) is expected
 
 
 @pytest.mark.parametrize(
