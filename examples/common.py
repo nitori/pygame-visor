@@ -102,11 +102,11 @@ class App[TileT]:
         # world size
         self.player_surf = pygame.Surface((10, 10))
         self.player_surf.fill("red")
+
+        # FRect to prevent rounding bias towards zero (makes certain directions move faster)
+        self.player_pos = self.player_surf.get_frect(center=(0, 0))
         if self.use_sdl2:
             self.player_surf = Texture.from_surface(self.renderer, self.player_surf)
-
-        # world pos
-        self.player_pos = self.player_surf.get_rect(center=(0, 0))
 
         self.second_player = second_player
         self.player2_surf = None
@@ -115,7 +115,7 @@ class App[TileT]:
         if second_player:
             self.player2_surf = pygame.Surface((10, 10))
             self.player2_surf.fill("blue")
-            self.player2_pos = self.player2_surf.get_rect(center=(20, 0))
+            self.player2_pos = self.player2_surf.get_frect(center=(20, 0))
             if self.use_sdl2:
                 self.player2_surf = Texture.from_surface(
                     self.renderer, self.player2_surf
