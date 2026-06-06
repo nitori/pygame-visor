@@ -40,8 +40,8 @@ def main():
             view2.update_screen(surf2.get_rect())
 
     for delta in app.loop(60, event_handler):
-        view1.lerp_to(app.player_pos.center, 0.1)
-        view2.lerp_to(app.player2_pos.center, 0.1)
+        view1.lerp_to(app.player_pos.center, view1.fps_corrected_weight(0.1, delta))
+        view2.lerp_to(app.player2_pos.center, view2.fps_corrected_weight(0.1, delta))
 
         surf1.fill("black")
         bbox = view1.get_bounding_box()

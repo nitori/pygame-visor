@@ -31,7 +31,7 @@ def main():
     exclude_map = {"left": "right", "right": "left", "up": "bottom", "bottom": "up"}
 
     for delta in app.loop(60):
-        view.lerp_to(current_center, 0.1)
+        view.lerp_to(current_center, view.fps_corrected_weight(0.1, delta))
 
         for side, sr in neighbours:
             if app.player_pos.colliderect(sr):

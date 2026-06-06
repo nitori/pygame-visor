@@ -69,6 +69,18 @@ class Visor:
         y = pygame.math.lerp(cy, py, weight)
         self.move_to((x, y))
 
+    @staticmethod
+    def fps_corrected_weight(weight: float, delta: float, fps: float = 60) -> float:
+        """Frame-rate-independent lerp weight for use with lerp_to().
+
+        Pass a `weight` tuned for `fps` and the current frame's `delta` (seconds).
+        Keeps the camera's follow distance constant under variable frame times.
+        """
+        if delta <= 0:
+            return 0.0
+        tau = (1 / fps) * (1 - weight) / weight
+        return delta / (delta + tau)
+
     def move_to(self, pos: WorldPos) -> None:
         self.region.center = pos[0], pos[1]
         if self.limits is None:

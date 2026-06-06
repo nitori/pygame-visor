@@ -26,7 +26,7 @@ def main():
     map_view.move_to(app.player_pos.center)
 
     for delta in app.loop(60):
-        view.lerp_to(app.player_pos.center, 0.1)
+        view.lerp_to(app.player_pos.center, view.fps_corrected_weight(0.1, delta))
         map_view.move_to(app.player_pos.center)
 
         bbox = view.get_bounding_box()
