@@ -1,6 +1,6 @@
 [project]
 name = "pygame-visor"
-version = "0.4.1"
+version = "0.4.2"
 description = "Pygame Visor - a simple Camera/Viewport library"
 readme = "README.md"
 authors = [
